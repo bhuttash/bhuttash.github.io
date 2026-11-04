@@ -3,71 +3,85 @@
 
 @import "{{ site.theme }}";
 
-/* Space at the top of the page so content starts below the full-size profile */
 body {
   padding-top: 200px;
 }
 
 .profile {
+  --p: 0;
+  /* 0 = top of page, 1 = fully scrolled; set by JavaScript */
   position: fixed;
   top: 0;
   left: 50%;
   transform: translateX(-50%);
+  width: max-content;
+  max-width: 100%;
   z-index: 1000;
   display: flex;
   align-items: center;
-  gap: 20px;
-  padding: 20px 24px;
+  //   pointer-events: none; /* let clicks pass through the empty areas */
+}
+
+/* Bar background fades in as you scroll */
+.profile-bg {
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  opacity: var(--p);
+}
+
+/* Slides from centered (p=0) to left-aligned (p=1) */
+.profile-inner {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: calc(20px - 8px * var(--p));
   width: max-content;
   max-width: 100%;
-  background: transparent;
-  transition: left 0.4s ease, transform 0.4s ease, padding 0.4s ease,
-              gap 0.4s ease, background 0.4s ease, box-shadow 0.4s ease;
+  left: calc(50% * (1 - var(--p)));
+  transform: translateX(calc(-50% * (1 - var(--p))));
+  margin-left: calc(16px * var(--p));
+  padding: calc(20px - 12px * var(--p)) 0;
+  pointer-events: auto;
+  will-change: left, transform;
 }
 
 .profile-photo {
-  width: 140px;
-  height: 140px;
+  width: calc(200px - 92px * var(--p));
+  /* 140px -> 48px */
+  height: calc(200px - 92px * var(--p));
   border-radius: 50%;
   object-fit: cover;
-  transition: width 0.4s ease, height 0.4s ease;
+  flex-shrink: 0;
 }
 
 .profile-info {
   display: flex;
   flex-direction: column;
   gap: 4px;
-  font-size: 1rem;
-  transition: font-size 0.4s ease;
+  font-size: calc(1rem - 0.15rem * var(--p));
 }
 
 .profile-info a {
   color: inherit;
 }
 
-/* Scrolled state: shrink, slide left, add a bar background */
-.profile.scrolled {
-  left: 0;
-  transform: translateX(0);
-  width: 100%;
-  padding: 8px 16px;
-  gap: 12px;
-  background: rgba(255, 255, 255, 0.95);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-}
-
-.profile.scrolled .profile-photo {
-  width: 48px;
-  height: 48px;
-}
-
-.profile.scrolled .profile-info {
-  font-size: 0.85rem;
-}
-
-/* Small screens: stack contact links and hide extras when scrolled */
+/* Small screens: fade out and collapse the links as the bar shrinks */
 @media (max-width: 600px) {
-  body { padding-top: 180px; }
-  .profile-photo { width: 100px; height: 100px; }
-  .profile.scrolled .profile-info span { display: none; }
+  body {
+    padding-top: 180px;
+  }
+
+  .profile-photo {
+    width: calc(100px - 52px * var(--p));
+    height: calc(100px - 52px * var(--p));
+  }
+
+  .profile-info span {
+    display: block;
+    overflow: hidden;
+    opacity: calc(1 - var(--p));
+    max-height: calc(3em * (1 - var(--p)));
+  }
 }
