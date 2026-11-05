@@ -1,73 +1,80 @@
 ---
 ---
 
+// @import url('https://fonts.googleapis.com/css?family=Arvo:400,700,400italic');
+
+// $body-font-family: 'Arvo', sans-serif;
+// $header-font-family: 'Arvo', sans-serif;
+
 @import "{{ site.theme }}";
 
-/* Space at the top of the page so content starts below the full-size profile */
 body {
-  padding-top: 200px;
+  padding-top: 300px;
 }
 
 .profile {
   position: fixed;
   top: 0;
-  left: 50%;
-  transform: translateX(-50%);
+  left: 0;
+  width: 100%;
   z-index: 1000;
+  pointer-events: none; /* clicks pass through empty areas */
+}
+
+.profile-bg {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  opacity: 0; /* JavaScript fades this in */
+}
+
+.profile-inner {
+  position: relative;
   display: flex;
   align-items: center;
-  gap: 20px;
-  padding: 20px 24px;
   width: max-content;
   max-width: 100%;
-  background: transparent;
-  transition: left 0.4s ease, transform 0.4s ease, padding 0.4s ease,
-              gap 0.4s ease, background 0.4s ease, box-shadow 0.4s ease;
+  pointer-events: auto;
+  will-change: transform;
 }
 
 .profile-photo {
-  width: 140px;
-  height: 140px;
+  width: 200px;   /* starting size; JavaScript animates it */
+  height: 200px;
   border-radius: 50%;
   object-fit: cover;
-  transition: width 0.4s ease, height 0.4s ease;
+  flex-shrink: 0;
+  box-shadow: rgb(180, 180, 180) 0 0 10px 5px;
 }
 
 .profile-info {
   display: flex;
   flex-direction: column;
   gap: 4px;
-  font-size: 1rem;
-  transition: font-size 0.4s ease;
+  background: rgba(255, 255, 255, 0.45);
+  border-radius: 5px;
+  box-shadow: rgb(180, 180, 180) 0 0 10px 5px;
+  padding: 10px;
+}
+
+.profile span {
+  color: darkred;
+  text-shadow: 0 1px darkgray;
+}
+
+.profile h1 {
+  text-shadow: 0 1px white;
 }
 
 .profile-info a {
   color: inherit;
 }
 
-/* Scrolled state: shrink, slide left, add a bar background */
-.profile.scrolled {
-  left: 0;
-  transform: translateX(0);
-  width: 100%;
-  padding: 8px 16px;
-  gap: 12px;
-  background: rgba(255, 255, 255, 0.95);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-}
-
-.profile.scrolled .profile-photo {
-  width: 48px;
-  height: 48px;
-}
-
-.profile.scrolled .profile-info {
-  font-size: 0.85rem;
-}
-
-/* Small screens: stack contact links and hide extras when scrolled */
 @media (max-width: 600px) {
   body { padding-top: 180px; }
   .profile-photo { width: 100px; height: 100px; }
-  .profile.scrolled .profile-info span { display: none; }
 }
