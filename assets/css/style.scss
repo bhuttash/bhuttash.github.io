@@ -1,87 +1,80 @@
 ---
 ---
 
+// @import url('https://fonts.googleapis.com/css?family=Arvo:400,700,400italic');
+
+// $body-font-family: 'Arvo', sans-serif;
+// $header-font-family: 'Arvo', sans-serif;
+
 @import "{{ site.theme }}";
 
 body {
-  padding-top: 200px;
+  padding-top: 300px;
 }
 
 .profile {
-  --p: 0;
-  /* 0 = top of page, 1 = fully scrolled; set by JavaScript */
   position: fixed;
   top: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: max-content;
-  max-width: 100%;
+  left: 0;
+  width: 100%;
   z-index: 1000;
-  display: flex;
-  align-items: center;
-  //   pointer-events: none; /* let clicks pass through the empty areas */
+  pointer-events: none; /* clicks pass through empty areas */
 }
 
-/* Bar background fades in as you scroll */
 .profile-bg {
   position: absolute;
-  inset: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
   background: rgba(255, 255, 255, 0.95);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-  opacity: var(--p);
+  opacity: 0; /* JavaScript fades this in */
 }
 
-/* Slides from centered (p=0) to left-aligned (p=1) */
 .profile-inner {
   position: relative;
   display: flex;
   align-items: center;
-  gap: calc(20px - 8px * var(--p));
   width: max-content;
   max-width: 100%;
-  left: calc(50% * (1 - var(--p)));
-  transform: translateX(calc(-50% * (1 - var(--p))));
-  margin-left: calc(16px * var(--p));
-  padding: calc(20px - 12px * var(--p)) 0;
   pointer-events: auto;
-  will-change: left, transform;
+  will-change: transform;
 }
 
 .profile-photo {
-  width: calc(200px - 92px * var(--p));
-  /* 140px -> 48px */
-  height: calc(200px - 92px * var(--p));
+  width: 200px;   /* starting size; JavaScript animates it */
+  height: 200px;
   border-radius: 50%;
   object-fit: cover;
   flex-shrink: 0;
+  box-shadow: rgb(180, 180, 180) 0 0 10px 5px;
 }
 
 .profile-info {
   display: flex;
   flex-direction: column;
   gap: 4px;
-  font-size: calc(1rem - 0.15rem * var(--p));
+  background: rgba(255, 255, 255, 0.45);
+  border-radius: 5px;
+  box-shadow: rgb(180, 180, 180) 0 0 10px 5px;
+  padding: 10px;
+}
+
+.profile span {
+  color: darkred;
+  text-shadow: 0 1px darkgray;
+}
+
+.profile h1 {
+  text-shadow: 0 1px white;
 }
 
 .profile-info a {
   color: inherit;
 }
 
-/* Small screens: fade out and collapse the links as the bar shrinks */
 @media (max-width: 600px) {
-  body {
-    padding-top: 180px;
-  }
-
-  .profile-photo {
-    width: calc(100px - 52px * var(--p));
-    height: calc(100px - 52px * var(--p));
-  }
-
-  .profile-info span {
-    display: block;
-    overflow: hidden;
-    opacity: calc(1 - var(--p));
-    max-height: calc(3em * (1 - var(--p)));
-  }
+  body { padding-top: 180px; }
+  .profile-photo { width: 100px; height: 100px; }
 }

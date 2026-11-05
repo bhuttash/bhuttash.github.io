@@ -4,42 +4,85 @@ title: Brad Huttash
 ---
 
 <div class="profile" id="profile">
-  <img class="profile-photo" src="{{ '/assets/img/me.jpg' | relative_url }}" alt="Your Name">
-  <div class="profile-info">
-    <strong>Brad Huttash</strong>
-    <span>
-      <a href="mailto:you@bhuttash@gmail.com" target="_blank">bhuttash@gmail.com</a> ·
-      <a href="https://linkedin.com/in/bradhuttash" target="_blank">LinkedIn</a> ·
-      <a href="https://github.com/bhuttash" target="_blank">GitHub</a>
-    </span>
+  <div class="profile-bg"></div>
+  <div class="profile-inner">
+    <img class="profile-photo" src="{{ '/assets/img/me.jpg' | relative_url }}" alt="Brad Huttash">
+    <div class="profile-info">
+      <h1><strong>Brad Huttash</strong></h1>
+      <span>
+        <a href="mailto:you@bhuttash@gmail.com" target="_blank">bhuttash@gmail.com</a> ·
+        <a href="https://linkedin.com/in/bradhuttash" target="_blank">LinkedIn</a> ·
+        <a href="https://github.com/bhuttash" target="_blank">GitHub</a>
+      </span>
+    </div>
   </div>
 </div>
+
 
 <script>
   (function () {
     var profile = document.getElementById('profile');
-    var RANGE = 200; // px of scrolling over which the animation plays
+    var bg = profile.querySelector('.profile-bg');
+    var inner = profile.querySelector('.profile-inner');
+    var photo = profile.querySelector('.profile-photo');
+    var info = profile.querySelector('.profile-info');
+    var links = info.querySelector('span');
+    var mobile = window.matchMedia('(max-width: 600px)');
+    var RANGE = 300; // px of scrolling over which the animation plays
     var ticking = false;
+
+    function lerp(a, b, p) { return a + (b - a) * p; }
 
     function update() {
       var t = Math.min(Math.max(window.scrollY / RANGE, 0), 1);
       var p = t * t * (3 - 2 * t); // smoothstep easing
-      profile.style.setProperty('--p', p.toFixed(4));
+
+      // Photo shrinks
+      var size = lerp(mobile.matches ? 100 : 250, 150, p);
+      photo.style.width = size + 'px';
+      photo.style.height = size + 'px';
+
+      // Text and spacing tighten
+      info.style.fontSize = lerp(24, 20, p) + 'px';
+      inner.style.gap = lerp(20, 12, p) + 'px';
+      inner.style.paddingTop = lerp(20, 8, p) + 'px';
+      inner.style.paddingBottom = lerp(20, 8, p) + 'px';
+
+      // On small screens, fade out the links as the bar shrinks
+      if (mobile.matches) {
+        links.style.display = 'block';
+        links.style.overflow = 'hidden';
+        links.style.opacity = 1 - p;
+        links.style.maxHeight = ((1 - p) * 3) + 'em';
+      } else {
+        links.style.opacity = '';
+        links.style.maxHeight = '';
+      }
+
+      // White banner fades in
+      bg.style.opacity = p;
+
+      // Slide from centered to the left edge
+      var centered = Math.max((profile.clientWidth - inner.offsetWidth) / 2, 0);
+      var x = lerp(centered, 16, p);
+      inner.style.transform = 'translateX(' + x + 'px)';
+
       ticking = false;
     }
 
-    window.addEventListener('scroll', function () {
+    function onScroll() {
       if (!ticking) {
         window.requestAnimationFrame(update);
         ticking = true;
       }
-    }, { passive: true });
+    }
 
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
     update();
   })();
 </script>
 
-# Brad Huttash
 #### SOFTWARE ENGINEER
 Data-driven engineering professional with a proven record of automating processes, improving yields, and standardizing systems across global teams. Expert in data analysis, process optimization, and scalable solutions, with a proven record of reducing planning cycles by 50%+ and unifying global test standards.
 

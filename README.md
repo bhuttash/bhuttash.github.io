@@ -1,2 +1,1 @@
-# Brad Huttash
-Software Engineer
+## Software Engineer
