@@ -151,7 +151,7 @@ input, select, textarea {
 		}
 
 	footer {
-		margin: 2em 0 0 0;
+		margin: 4em 0 0 0;
 	}
 
 	strong, b {
@@ -2252,7 +2252,7 @@ input, select, textarea {
 			#main > section.one {
 				background-color: #81918E;
 				background-image: 
-				linear-gradient(rgba(0, 0, 0, 0.6)),
+				linear-gradient(rgba(0, 0, 0, 0.7)),
 				url("../../images/fotis-fotopoulos-LJ9KY8pIH3E-unsplash.jpg");
 			}
 
@@ -2291,6 +2291,10 @@ input, select, textarea {
 			display: flex;
 			align-items: center;
 			gap: 1.25em;
+		}
+
+		#main > #top p {
+			font-size: 1.5em;
 		}
 
 /* Wide */
